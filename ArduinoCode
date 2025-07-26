@@ -1,0 +1,113 @@
+#define xPulse 4
+#define xDir 2
+#define zPulse 32
+#define zDir 33
+#define yPulse 25
+#define yDir 26
+#define Gripper 27
+#define xlim    4
+
+void moveX(int degree, int speed, int direction) {
+  digitalWrite(xDir, direction);
+  int pulse = degree * 28;
+  int i = 0;
+  for (i = 0; i < pulse; ++i) {
+    digitalWrite(xPulse, HIGH);
+    delayMicroseconds(speed);
+    digitalWrite(xPulse, LOW);
+    delayMicroseconds(speed);
+  }
+}
+
+void moveY(int degree, int speed, int direction) {
+  digitalWrite(yDir, direction);
+  int pulse = degree * 28;
+  int i = 0;
+  for (i = 0; i < pulse; ++i) {
+    digitalWrite(yPulse, HIGH);
+    delayMicroseconds(speed);
+    digitalWrite(yPulse, LOW);
+    delayMicroseconds(speed);
+  }
+}
+
+void moveZ(int length, int speed, int direction) {
+  digitalWrite(zDir, direction);
+  int pulse = length * 27;
+  int i = 0;
+  for (i = 0; i < pulse; ++i) {
+    digitalWrite(zPulse, HIGH);
+    delayMicroseconds(speed);
+    digitalWrite(zPulse, LOW);
+    delayMicroseconds(speed);
+  }
+}
+
+void defaultx(int speed) {
+  digitalWrite(xDir, 1);  
+  while (digitalRead(xlim) == 1) {
+    digitalWrite(xPulse, HIGH);
+    delayMicroseconds(speed);
+    digitalWrite(xPulse, LOW);
+    delayMicroseconds(speed);
+  }
+}
+
+void setup() {
+  pinMode(xPulse, OUTPUT);
+  pinMode(xDir, OUTPUT);
+  pinMode(yPulse, OUTPUT);
+  pinMode(yDir, OUTPUT);
+  pinMode(zPulse, OUTPUT);
+  pinMode(zDir, OUTPUT);
+  pinMode(Gripper, OUTPUT);
+  pinMode(xlim, INPUT_PULLUP);
+
+}
+
+void loop() {
+  defaultx(100);
+  //Step1
+  moveZ(100, 80, 1);
+  delay(500);
+  moveY(90, 80, 1);
+  delay(500);
+  moveZ(90, 80, 0);
+  delay(500);
+  digitalWrite(Gripper, HIGH);
+  delay(500);
+  moveZ(90, 80, 1);
+  delay(500);
+  moveY(90, 80, 0);
+  delay(500);
+  moveX(90, 80, 1);
+  delay(500);
+  moveZ(90, 80, 0);
+  delay(500);
+  digitalWrite(Gripper, LOW);
+  delay(500);
+  moveZ(90, 80, 1);
+  delay(500);
+  digitalWrite(Gripper, HIGH);
+  delay(500);
+  moveX(90, 80, 0);
+  delay(500);
+  moveZ(100, 80, 0);
+  delay(2000);
+
+  /*
+  //step2
+  oveY(90,500,1);
+  digitalWrite(Gripper,LOW);
+  moveZ(160,500,0);
+  digitalWrite(Gripper,HIGH);
+  moveZ(160,500,1);
+  moveY(90,500,0);
+  moveX(90,500,1);
+  moveZ(115,500,0);
+  digitalWrite(Gripper,LOW);
+  moveZ(115,500,1);
+  digitalWrite(Gripper,HIGH);
+  moveX(90,500,0);
+  */
+}
